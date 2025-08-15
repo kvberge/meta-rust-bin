@@ -6,12 +6,18 @@ SECTION = "devel"
 inherit cross
 inherit rust_bin-common
 
-PN:class-native = "rust-bin-native-${BUILD_ARCH}"
+PN = "rust-bin-cross-${TARGET_ARCH}-${PV}"
+PN:class-native = "rust-bin-native-${BUILD_ARCH}-${PV}"
+
+# The PN is going to have the version in it, so don't duplicate it here
+BP = "${PN}"
+# normally comprised of PN/PV, but our PN has the PV in it so don't duplicate it
+PF="${PN}-${EXTENDPE}${PR}"
+# normally comprised of PN/PV, but our PN has the PV in it so don't duplicate it
+P="${PN}"
 
 # Required to link binaries
-DEPENDS += "${@ "gcc-cross-${TARGET_ARCH}" if d.getVar('TARGET_ARCH') == "X86_64" else "" }" 
-
-PN = "rust-bin-cross-${TARGET_ARCH}"
+DEPENDS += "${@ "gcc-cross-${TARGET_ARCH}" if d.getVar('TARGET_ARCH') == "X86_64" else "" }"
 
 # Extra architectures to install standard library for. Must match one of the
 # standard rust targets. The standard library for the default host and target
@@ -30,7 +36,7 @@ def get_s(d):
         return "${WORKDIR}/rustc-nightly-${RUST_BUILD_TARGET}"
     else:
         return "${WORKDIR}/rustc-${PV}-${RUST_BUILD_TARGET}"
-  
+
 S = "${@get_s(d)}"
 
 # Relocating WORKDIR doesn't matter to installer

@@ -6,9 +6,15 @@ SECTION = "devel"
 inherit cross
 inherit rust_bin-common
 
-PN = "cargo-bin-cross-${TARGET_ARCH}"
+PN = "cargo-bin-cross-${TARGET_ARCH}-${PV}"
+# The PN is going to have the version in it, so don't duplicate it here
+BP = "${PN}"
+# normally comprised of PN/PV, but our PN has the PV in it so don't duplicate it
+PF="${PN}-${EXTENDPE}${PR}"
+# normally comprised of PN/PV, but our PN has the PV in it so don't duplicate it
+P="${PN}"
 
-PROVIDES += "cargo-bin-native"
+PROVIDES += "cargo-bin-native-${PV}"
 
 CARGO_HOST_TARGET = "${@rust_target(d, 'HOST')}"
 
